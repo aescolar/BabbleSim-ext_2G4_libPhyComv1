@@ -98,6 +98,12 @@ int p2G4_modulation_from_string(const char* name, p2G4_modulation_t *modulation,
     if ( strncmp(&name[i], "BLI",3)==0 ){
       *modulation = P2G4_MOD_BLEINTER;
       if (verb) bs_trace_raw(9,"Modulation set to BLE interferent\n");
+    } else if ( strncmp(&name[i], "BLE_CODED",9)==0 ) {
+      *modulation = P2G4_MOD_BLE_CODED;
+      if (verb) bs_trace_raw(9,"Modulation set to BLE Coded\n");
+    } else if ( strncmp(&name[i], "BLE_HDT",7)==0 ) {
+      *modulation = P2G4_MOD_BLE_HDT;
+      if (verb) bs_trace_raw(9,"Modulation set to BLE HDT\n");
     } else if ( strncmp(&name[i], "BL",2)==0 ){
       *modulation = P2G4_MOD_BLE;
       if (verb) bs_trace_raw(9,"Modulation set to BLE\n");
@@ -113,6 +119,9 @@ int p2G4_modulation_from_string(const char* name, p2G4_modulation_t *modulation,
     } else if ( strncmp(&name[i], "Prop4M",6)==0 ) {
       *modulation = P2G4_MOD_PROP4M;
       if (verb) bs_trace_raw(9,"Modulation set to 4Mbit propietary\n");
+    } else if ( strncmp(&name[i], "154", 3)==0 ) {
+      *modulation = P2G4_MOD_154_250K_DSS;
+      if (verb) bs_trace_raw(9,"Modulation set to 802.15.4-2006 DSS 250kbps\n");
     } else if ( strncmp(&name[i], "WLAN",4)==0 ){
       *modulation = P2G4_MOD_WLANINTER;
       if (verb) bs_trace_raw(9,"Modulation set to WLAN\n");
