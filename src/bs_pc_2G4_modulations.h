@@ -30,6 +30,12 @@ extern "C"{
 #define P2G4_MOD_PROP3M          0x31 //Proprietary 3Mbps
 #define P2G4_MOD_PROP4M          0x41 //Proprietary 4Mbps
 #define P2G4_MOD_BLE_CODED       0x50 //Standard BLE CodedPhy (both S=2 & S=8)
+/* BLE HDT modulations (Note all have the same BW and spectral shape) */
+#define P2G4_MOD_BLE_HDT         0x60 //BLE HDT
+#define P2G4_MOD_BLE_HDT_QPSK    0x60 //BLE HDT - QPSK modulation
+#define P2G4_MOD_BLE_HDT_8PSK    0x61 //BLE HDT - 8PSK modulation
+#define P2G4_MOD_BLE_HDT_16QAM   0x62 //BLE HDT - 16QAM modulation
+
 #define P2G4_MOD_154_250K_DSS   0x100 //IEEE 802.15.4-2006 DSS 250kbps O-QPSK PHY
 
 /* Non receivable modulations (interferers) */
@@ -45,6 +51,25 @@ extern "C"{
 #define P2G4_MOD_WHITENOISE20MHz 0x8080
 #define P2G4_MOD_WHITENOISE40MHz 0x8090
 #define P2G4_MOD_WHITENOISE80MHz 0x80A0
+
+
+/* BLE Coded Phy coding rates */
+#define P2G4_CODRATE_BLE_S2 2
+#define P2G4_CODRATE_BLE_S8 8
+
+/* BLE HDT coding rates (for format 0; and format 1 data) */
+#define P2G4_CODRATE_BLE_HDT2   2
+#define P2G4_CODRATE_BLE_HDT3   3
+#define P2G4_CODRATE_BLE_HDT4   4
+#define P2G4_CODRATE_BLE_HDT6   6
+#define P2G4_CODRATE_BLE_HDT7_5 8
+
+/* HDT format *1* header coding */
+#define P2G4_CODRATE_BLE_HEADHDT2   2 /* Same coding as HDT2 */
+#define P2G4_CODRATE_BLE_HEADHDT3   2 /* Same coding as HDT2 */
+#define P2G4_CODRATE_BLE_HEADHDT4   5 /* Different coding than anything else */
+#define P2G4_CODRATE_BLE_HEADHDT6   7 /* Different coding than data */
+#define P2G4_CODRATE_BLE_HEADHDT7_5 7 /* Different coding than data but same as HEADHDT6 */
 
 #ifdef __cplusplus
 }

@@ -60,7 +60,7 @@ another threshold and a compatible modulation is found in the air.
 #### Coded Phy and other multi-modulation and/or multi-payload packets
 Coded Phy packets shall be handled as two back to back transmissions.
 Where the 1st transmission covers the {preamble + address + CI + term}
-and the 2nd transmissions covers the {PDU (header + payload + ..) + header + CRC}.
+and the 2nd transmissions covers the {PDU (header + payload + ..) + CRC}.
 For each consecutive transmission the following must be true:
 
 * {1st tx}.end_tx_time = {1st tx}.end_packet_time
@@ -87,6 +87,60 @@ The FEC2 reception:
 
 This can be expanded to any number of sub-payloads with the same or different
 modulations.
+
+##### HDT
+
+For HDT, packets shall be transmitted as follows:
+
+* For all packets parts
+    * phy_address shall be the 40 bit PCA.
+    * radio_params.modulation shall be set to P2G4_MOD_BLE_HDT*.
+
+* Short format packets shall be 1 single transmission, consisting of the Premable(s) (STS & LTS),
+  and the control header.
+    * The coding_rate shall be HDT2.
+    * The packet content shall include the 57 Control header bits, including the PCA-A, including its HEC-C CRC bits.
+    * These 57 control header shall be packed in 8 bytes
+        * The first 5 bytes shall contain the actual 33bits of control header information (zero padded with 7 zeroes in the last byte MSBits).
+        * The following 3 bytes shall contain the HEC-C CRC
+    * And therefore packet_size shall be 8 bytes.
+    * duration (end_packet_time - start_packet_time + 1) shall include the termination (termination
+      bits, symbol zero padding and termination symbols), that is 37+32us
+
+* Format 0 packets shall be 2 separate transmissions.
+    * Where the first transmission shall be equal to a short format transmission.
+    * And the 2nd transmission shall include the PDU (PDU Header, data, CRC and termination).
+        * coding_rate shall correspond to the configured rate (HDT2, HDT3,..,HDT7p5)
+        * The packet content shall include the PDU header, payload (incl. possible MIC) and CRC
+        * packet_size shall match that 2nd "transmission" packet content
+        * duration shall include the termination.
+
+* Format 1 packets shall be 3 or more separate transmissions.
+    * Where the first transmission shall be equal to a short format transmission.
+    * Where the 2nd transmission includes the PDU header
+        * coding_rate shall correspond to the configured header rate (P2G4_CODRATE_BLE_HEADHDT*)
+        * The packet content shall include the PDU header, and HEC-P
+        * packet_size shall match this packet content
+        * duration shall include the termination.
+    * The remaining transmissions will be one per payload or payload block (if the payload is
+      divided into blocks).
+        * coding_rate shall correspond to the configured rate (HDT2, HDT3,..,HDT7p5)
+        * The packet content shall include the payload (incl. possible MIC) or payload block
+          and CRC
+        * packet_size shall match this packet content
+        * The end_packet_time shall always match:
+            * The last symbol on air that transmitted the last bit of information of that
+              payload or block CRC, + 1 us (the timing of 2 possible termination symbols).
+              But not including PITS even if the block or payload finished just before
+              a Phy interval border.
+            * This means that if a payload or payload block would have been broken in
+              several Phy intervals the extra time used in between those Phy intervals
+              (for the termination and PITS) is to be accounted into the duration.
+          This way, the end of the last block will match the actual end of the packet.
+
+TODO: Make drawing for format 1 with phy interval in the middle of the block, just at the end and no phyint.
+
+HDT is only supported in v2 Tx and Rx APIs
 
 ## API
 
