@@ -27,8 +27,7 @@ different protocols, and more features.
 
 If desired, devices which supported the old API can be mapped to the new API
 without loss of functionality (see instructions on each structure in the header
-file). But at this point it is not recommended to do this, as the new API is
-still in alpha state.
+file).
 
 #### Txv2:
 A p2G4_txv2_t structure from the device, is followed by a byte array of
